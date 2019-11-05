@@ -11,11 +11,9 @@ const {
 } = require('platform-folders');
 const fs = require('fs');
 const chalk = require('chalk');
-const {
-    spawn
-} = require('child_process');
 const inquirer = require('inquirer');
 const Connection = require('mongodb-connection-model');
+const shell = require('./lib/shell');
 
 const COMPASS = {
     STABLE_FOLDER: 'MongoDB Compass',
@@ -23,10 +21,11 @@ const COMPASS = {
     DEV_FOLDER: 'MongoDB Compass Dev'
 };
 const COMPASS_CONNECTIONS_FOLDER = 'Connections';
-const SHELL = 'mongo';
 
-const compassConfigPath = path.join(getConfigHome(), COMPASS.DEV_FOLDER);
+const compassConfigPath = path.join(getConfigHome(), COMPASS.BETA_FOLDER);
 const connectionsPath = path.join(compassConfigPath, COMPASS_CONNECTIONS_FOLDER);
+
+const shellOnClose = () => console._log(`Bye bye ${chalk.yellow.bold('★')}`);
 
 async function checkFolders() {
     try {
@@ -52,35 +51,17 @@ async function loadFavs(connectionsPath) {
     return favs;
 }
 
-function startShellForFav(name, uri) {
-    const shell = spawn(SHELL, [uri], {
-        stdio: 'inherit'
-    });
-    shell.on('close', (code) => {
-        console._log(`Bye bye ${chalk.yellow.bold('★')}`);
-    });
-}
-
-function startShellWithArgs(args) {
-    const shell = spawn(SHELL, args, {
-        stdio: 'inherit'
-    });
-    shell.on('close', (code) => {
-        console._log(`Bye bye ${chalk.yellow.bold('★')}`);
-    });
-}
-
 async function go() {
     if (process.argv.length > 2) {
         //If some arguments are passed in, just hand over to
         //the shell as the user is probably not looking for
         //favorites this time
-        return startShellWithArgs(process.argv.slice(2));
+        return shell.startShellWithArgs(process.argv.slice(2), shellOnClose);
     }
     
     if (!await checkFolders()) {
         console._log(chalk.yellow.bold('MongoDB Compass is not installed or the version installed is outdated.'));
-        console._log(`To manage your favorites and share them with ${'`' + SHELL + '`'} please install the most recent`);
+        console._log(`To manage your favorites and share them with the shell, please install the most recent`);
         console._log(`version of Compass from ${chalk.blue('https://www.mongodb.com/download-center/compass')}`);
         return;
     }
@@ -105,7 +86,7 @@ async function go() {
         }]);
     const conn = new Connection(fav);
     const uri = conn.driverUrl.replace(/undefined/i, '');
-    startShellForFav(fav.name, uri);
+    shell.startShellForFav(fav.name, uri, shellOnClose);
 }
 
 module.exports = go;
