@@ -52,7 +52,7 @@ async function loadFavs(connectionsPath) {
     return favs;
 }
 
-function startShell(name, uri) {
+function startShellForFav(name, uri) {
     const shell = spawn(SHELL, [uri], {
         stdio: 'inherit'
     });
@@ -61,7 +61,22 @@ function startShell(name, uri) {
     });
 }
 
+function startShellWithArgs(args) {
+    const shell = spawn(SHELL, args, {
+        stdio: 'inherit'
+    });
+    shell.on('close', (code) => {
+        console._log(`Bye bye ${chalk.yellow.bold('★')}`);
+    });
+}
+
 async function go() {
+    if (process.argv.length > 2) {
+        //If some arguments are passed in, just hand over to
+        //the shell as the user is probably not looking for
+        //favorites this time
+        return startShellWithArgs(process.argv.slice(2));
+    }
     
     if (!await checkFolders()) {
         console._log(chalk.yellow.bold('MongoDB Compass is not installed or the version installed is outdated.'));
@@ -90,7 +105,7 @@ async function go() {
         }]);
     const conn = new Connection(fav);
     const uri = conn.driverUrl.replace(/undefined/i, '');
-    startShell(fav.name, uri);
+    startShellForFav(fav.name, uri);
 }
 
 module.exports = go;
