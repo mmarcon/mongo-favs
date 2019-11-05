@@ -1,0 +1,20 @@
+{
+  "name": "mongo-favs",
+  "version": "1.0.0",
+  "description": "MongoDB shell launcher with support for Compass favorites",
+  "main": "index.js",
+  "bin": {
+    "mongo-favs": "./cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Massimiliano Marcon",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "inquirer": "^7.0.0",
+    "mongodb-connection-model": "^14.3.2",
+    "platform-folders": "^0.4.1"
+  }
+}
