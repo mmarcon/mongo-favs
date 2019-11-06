@@ -1,10 +1,3 @@
-//Monkey-patching console.log to
-//avoid warning printed out by
-//mongodb-connection-model when
-//it looks for electron
-console._log = console.log;
-console.log = () => {};
-
 const path = require('path');
 const {
     getConfigHome
@@ -12,7 +5,7 @@ const {
 const fs = require('fs');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
-const Connection = require('mongodb-connection-model');
+const Connection = require('mongodb-connection-model/lib/model');
 const shell = require('./lib/shell');
 
 const COMPASS = {
@@ -25,7 +18,7 @@ const COMPASS_CONNECTIONS_FOLDER = 'Connections';
 const compassConfigPath = path.join(getConfigHome(), COMPASS.BETA_FOLDER);
 const connectionsPath = path.join(compassConfigPath, COMPASS_CONNECTIONS_FOLDER);
 
-const shellOnClose = () => console._log(`Bye bye ${chalk.yellow.bold('★')}`);
+const shellOnClose = () => console.log(`Bye bye ${chalk.yellow.bold('★')}`);
 
 async function checkFolders() {
     try {
@@ -60,9 +53,9 @@ async function go() {
     }
     
     if (!await checkFolders()) {
-        console._log(chalk.yellow.bold('MongoDB Compass is not installed or the version installed is outdated.'));
-        console._log(`To manage your favorites and share them with the shell, please install the most recent`);
-        console._log(`version of Compass from ${chalk.blue('https://www.mongodb.com/download-center/compass')}`);
+        console.log(chalk.yellow.bold('MongoDB Compass is not installed or the version installed is outdated.'));
+        console.log(`To manage your favorites and share them with the shell, please install the most recent`);
+        console.log(`version of Compass from ${chalk.blue('https://www.mongodb.com/download-center/compass')}`);
         return;
     }
 
