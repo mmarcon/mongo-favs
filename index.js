@@ -15,7 +15,7 @@ const COMPASS = {
 };
 const COMPASS_CONNECTIONS_FOLDER = 'Connections';
 
-const compassConfigPath = path.join(getConfigHome(), COMPASS.BETA_FOLDER);
+const compassConfigPath = path.join(getConfigHome(), COMPASS.STABLE_FOLDER);
 const connectionsPath = path.join(compassConfigPath, COMPASS_CONNECTIONS_FOLDER);
 
 const shellOnClose = () => console.log(`Bye bye ${chalk.yellow.bold('★')}`);
