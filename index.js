@@ -18,7 +18,10 @@ const COMPASS_CONNECTIONS_FOLDER = 'Connections';
 const compassConfigPath = path.join(getConfigHome(), COMPASS.STABLE_FOLDER);
 const connectionsPath = path.join(compassConfigPath, COMPASS_CONNECTIONS_FOLDER);
 
-const shellOnClose = () => console.log(`Bye bye ${chalk.yellow.bold('★')}`);
+const STAR = process.platform === 'win32' ? '!' : '★';
+const COLOR_BAR = process.platform === 'win32' ? '|' : '🁢';
+
+const shellOnClose = () => console.log(`Bye bye ${chalk.yellow.bold(STAR)}`);
 
 async function checkFolders() {
     try {
@@ -69,8 +72,8 @@ async function go() {
             message: 'What do you want to connect to?',
             choices: favs.map(fav => {
                 const name = fav.color ?
-                    `${chalk.hex(fav.color).bold('🁢')} ${fav.name}` :
-                    `${chalk.hidden('🁢')} ${fav.name}`;
+                    `${chalk.hex(fav.color).bold(COLOR_BAR)} ${fav.name}` :
+                    `${chalk.hidden(COLOR_BAR)} ${fav.name}`;
                 return {
                     name,
                     value: fav

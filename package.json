@@ -1,6 +1,6 @@
 {
   "name": "mongo-favs",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "MongoDB shell launcher with support for Compass favorites",
   "main": "index.js",
   "bin": {
